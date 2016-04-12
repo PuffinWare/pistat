@@ -25,24 +25,15 @@ REG_CHANNEL_SEL = 0xD2
 REG_CONFIG      = 0xC3
 
 # Channel Codes
-CHANNEL_0 = 0xF0
-CHANNEL_1 = 0xE1
-CHANNEL_2 = 0xD2
-CHANNEL_3 = 0xC3
-CHANNEL_4 = 0xB4
-CHANNEL_5 = 0xA5
-CHANNEL_6 = 0x96
-CHANNEL_7 = 0x87
-
 CHANNELS = {
-  0: CHANNEL_0,
-  1: CHANNEL_1,
-  2: CHANNEL_2,
-  3: CHANNEL_3,
-  4: CHANNEL_4,
-  5: CHANNEL_5,
-  6: CHANNEL_6,
-  7: CHANNEL_7
+  0: 0xF0,
+  1: 0xE1,
+  2: 0xD2,
+  3: 0xC3,
+  4: 0xB4,
+  5: 0xA5,
+  6: 0x96,
+  7: 0x87
 }
 
 SHUTDOWN = OneWireEvent(None)
@@ -58,7 +49,7 @@ class Status(object):
     self.tripletSecondBit = (status_byte & 0x40) == 0x40
     self.branchDirTaken = (status_byte & 0x80) == 0x80
 
-class DS_2482(Thread):
+class DS2482(Thread):
   def __init__(self, address=0x18, bus=None):
     Thread.__init__(self)
     self.address = address

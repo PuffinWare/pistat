@@ -1,4 +1,3 @@
-
 class OneWireEvent(object):
   def __init__(self, channel=None, reset=True, callback=None, delay=0):
     self.channel = channel
@@ -14,7 +13,6 @@ class OneWireEvent(object):
 class WriteTo1W(OneWireEvent):
   def __init__(self, data, **kwargs):
     OneWireEvent.__init__(self, **kwargs)
-    #self.data = kwargs['data']
     self.data = data
 
   def complete(self):
@@ -30,4 +28,3 @@ class ReadFrom1W(OneWireEvent):
     self.data = data
     if self.callback is not None:
       self.callback.complete(data)
-

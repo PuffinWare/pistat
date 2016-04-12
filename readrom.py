@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
+import sys
 import logging, logging.handlers
-import ds2482.event
-import ds2482.ds2482
+import maxim.event
+from maxim import DS2482
 
 log = logging.getLogger(__name__)
 
@@ -28,9 +29,11 @@ class Callback(object):
 
 setup_logger(False)
 log.info('Start')
-ds = ds2482.ds2482.DS_2482()
+ds = DS2482()
 
-ds.handle_event(ds2482.event.WriteTo1W('\x33', channel=0))
-ds.handle_event(ds2482.event.ReadFrom1W(8, reset=False, channel=0, callback=Callback()))
+chn = int(sys.argv[1])
+
+ds.handle_event(maxim.event.WriteTo1W('\x33', channel=chn))
+ds.handle_event(maxim.event.ReadFrom1W(8, reset=False, channel=chn, callback=Callback()))
 
 log.info('Done')

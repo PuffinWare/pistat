@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 import logging, logging.handlers
-import ds2482.event
-import ds2482.ds2482
+import maxim.event
+from maxim import DS2482
 import time
 
 log = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ class Callback(object):
     lsb = data[0]
     msb = data[1] << 8
     reading = lsb | msb
-    degc = reading *0.0625
+    degc = reading * 0.0625
     degf = ((reading * 0.5625) / 5) + 32
     log.info('%d | %.2f | %.2f', reading, degc, degf)
 
@@ -35,23 +35,23 @@ class Callback(object):
 
 setup_logger(False)
 log.info('Start')
-ds = ds2482.ds2482.DS_2482()
+ds = DS2482()
 
 # for chn in range(0, 3):
 #   log.info("-- %d --", chn)
-#   ds.handle_event(ds2482.event.WriteTo1W('\xCC\x44', channel=chn, delay=0.75))
-#   ds.handle_event(ds2482.event.WriteTo1W('\xCC\xBE', channel=chn))
-#   ds.handle_event(ds2482.event.ReadFrom1W(9, reset=False, channel=chn, callback=Callback()))
+#   ds.handle_event(maxim.event.WriteTo1W('\xCC\x44', channel=chn, delay=0.75))
+#   ds.handle_event(maxim.event.WriteTo1W('\xCC\xBE', channel=chn))
+#   ds.handle_event(maxim.event.ReadFrom1W(9, reset=False, channel=chn, callback=Callback()))
 
 # Initate temp conversion
 for chn in range(0, 3):
-  ds.handle_event(ds2482.event.WriteTo1W('\xCC\x44', channel=chn))
+  ds.handle_event(maxim.event.WriteTo1W('\xCC\x44', channel=chn))
 # Wait 750ms for conversion to complete
 time.sleep(0.75)
 # Read values
 for chn in range(0, 3):
   log.info("-- %d --", chn)
-  ds.handle_event(ds2482.event.WriteTo1W('\xCC\xBE', channel=chn))
-  ds.handle_event(ds2482.event.ReadFrom1W(9, reset=False, channel=chn, callback=Callback()))
+  ds.handle_event(maxim.event.WriteTo1W('\xCC\xBE', channel=chn))
+  ds.handle_event(maxim.event.ReadFrom1W(9, reset=False, channel=chn, callback=Callback()))
 
 log.info('Done')

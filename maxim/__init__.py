@@ -1,0 +1,1 @@
+from ds2482 import DS2482
