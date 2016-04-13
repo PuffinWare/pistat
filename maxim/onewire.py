@@ -1,0 +1,5 @@
+# ROM Commands
+ROM_SEARCH = 0xF0
+ROM_READ = 0x33
+ROM_MATCH = 0x55
+ROM_SKIP = 0xCC

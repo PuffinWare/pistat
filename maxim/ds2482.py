@@ -1,5 +1,5 @@
 import smbus
-import time
+import time, sys
 import Queue
 import logging
 from event import OneWireEvent,ReadFrom1W,WriteTo1W
@@ -58,10 +58,11 @@ class DS2482(Thread):
     self.shutdown = False
     # self.start()
 
-  def execute(self, event, callback):
-    if callback is not None:
-      event.callback = callback
-      self.queue.put(event)
+  def execute(self, event):
+    self.queue.put(event)
+
+  def stop(self):
+    self.queue.put(SHUTDOWN)
 
   def run(self):
     while True:
@@ -72,16 +73,13 @@ class DS2482(Thread):
           break
         log.debug('Event: %s', type(event).__name__)
         self.handle_event(event)
-        if event.callback is not None:
-          log.debug('Complete: %s', type(event).__name__)
-          self.event.callback()
+        log.debug('Complete: %s', type(event).__name__)
 
       except Queue.Empty:
         continue
 
       except:
-        if event is not None and event:
-          event.callback.fail()
+        event.fail(sys.exc_info())
 
     self.i2cbus.close()
 
@@ -138,7 +136,8 @@ class DS2482(Thread):
     Write one or more bytes of data out to a 1W device
     """
     for char in event.data:
-      byte = ord(char)
+      byte = char
+      # byte = ord(char)
       log.debug('1w-write: %s | %s', hex(byte), bin(byte))
       self.i2cbus.write_byte_data(self.address, CMD_1W_WRITE_BYTE, byte)
       self.poll_1w_busy()
@@ -147,7 +146,7 @@ class DS2482(Thread):
 
   def read_from_1w(self, event):
     """
-    Write one or more bytes of data out to a 1W device
+    Read bytes of data from a 1W device
     """
     data = []
     for i in range(0, event.count):

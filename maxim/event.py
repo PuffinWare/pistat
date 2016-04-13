@@ -1,14 +1,22 @@
+import threading
+
 class OneWireEvent(object):
   def __init__(self, channel=None, reset=True, callback=None, delay=0):
     self.channel = channel
     self.reset = reset
     self.callback = callback
     self.delay = delay
+    self.failed = None
+    self.lock = threading.Event()
 
-  def fail(self, reason):
-    self.reason = reason
-    if self.callback is not None:
-      self.callback.fail(reason)
+  def join(self):
+    self.lock.wait()
+    if self.failed is not None:
+      raise self.failed[0], self.failed[1], self.failed[2]
+
+  def fail(self, exc_info):
+    self.failed = exc_info
+    self.lock.set()
 
 class WriteTo1W(OneWireEvent):
   def __init__(self, data, **kwargs):
@@ -16,8 +24,7 @@ class WriteTo1W(OneWireEvent):
     self.data = data
 
   def complete(self):
-    if self.callback is not None:
-      self.callback.complete()
+    self.lock.set()
 
 class ReadFrom1W(OneWireEvent):
   def __init__(self, count, **kwargs):
@@ -26,5 +33,4 @@ class ReadFrom1W(OneWireEvent):
 
   def complete(self, data):
     self.data = data
-    if self.callback is not None:
-      self.callback.complete(data)
+    self.lock.set()
