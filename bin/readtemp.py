@@ -1,9 +1,12 @@
 #!/usr/bin/python
 
-import logging, logging.handlers
-from maxim.event import WriteTo1W,ReadFrom1W
-from maxim import DS2482
+import logging
+import logging.handlers
 import time
+
+from maxim import DS2482
+
+from event import WriteTo1W,ReadFrom1W
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +41,7 @@ for chn in range(0, 3):
   ds.handle_event(WriteTo1W('\xCC\x44', channel=chn))
 # Wait 750ms for conversion to complete
   time.sleep(0.75)
+
 # Read values
 for chn in range(0, 3):
   log.info("-- %d --", chn)

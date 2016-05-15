@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
-import sys
-import logging, logging.handlers
-import maxim.event
-from maxim import DS2482
+import logging
+import logging.handlers
+import time
+
+from maxim import DS2482,DS18B20
 
 log = logging.getLogger(__name__)
 
@@ -18,22 +19,26 @@ def setup_logger(debug):
   consoleHandler.setFormatter(formatter)
   logger.addHandler(consoleHandler)
 
-class Callback(object):
-  def complete(self, data):
-    log.info('complete')
-    for char in data:
-      log.info('%s | %s', hex(char), bin(char))
-
-  def fail(self):
-    log.error('fail')
-
 setup_logger(False)
 log.info('Start')
 ds = DS2482()
+ds.start()
 
-chn = int(sys.argv[1])
+sensors = [
+  DS18B20(ds, channel=0),
+  DS18B20(ds, channel=1),
+  DS18B20(ds, channel=2)
+]
 
-ds.handle_event(maxim.event.WriteTo1W('\x33', channel=chn))
-ds.handle_event(maxim.event.ReadFrom1W(8, reset=False, channel=chn, callback=Callback()))
+# Initate temp conversion
+for i in range(0, 3):
+  sensors[i].update()
 
+time.sleep(1)
+
+# Read values
+for i in range(0, 3):
+  log.info('%.2f | %.2f', sensors[i].degc, sensors[i].degf)
+
+ds.stop()
 log.info('Done')

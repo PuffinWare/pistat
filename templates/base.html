@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PuffinWare | PiStat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/static/favicon.ico" rel="shortcut icon">
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/pistat.css" rel="stylesheet">
+  <script src="/static/js/lib/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/lib/bootstrap.min.js"></script>
+  <script src="/static/js/lib/mustache.min.js"></script>
+</head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Catapult</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="main-navbar">
+          <ul class="nav navbar-nav navbar-left">
+            <li{% if nav.nav_home() %} class="active"{% endif %}><a href="/">Home{% if nav.nav_home() %} <span class="sr-only">(current)</span>{% endif %}</a></li>
+            <li{% if nav.nav_config() %} class="active"{% endif %}><a href="/config">Config{% if nav.nav_config() %} <span class="sr-only">(current)</span>{% endif %}</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+    <div class="container-fluid">
+{% block content %}{% endblock %}
+    </div>
+{% block scripts %}{% endblock %}
+  </body>
+</html>

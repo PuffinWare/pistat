@@ -2,7 +2,7 @@ import smbus
 import time, sys
 import Queue
 import logging
-from event import OneWireEvent,ReadFrom1W,WriteTo1W
+from onewire import Status,SHUTDOWN,ReadFrom1W,WriteTo1W
 from threading import Thread
 
 log = logging.getLogger(__name__)
@@ -36,19 +36,6 @@ CHANNELS = {
   7: 0x87
 }
 
-SHUTDOWN = OneWireEvent(None)
-
-class Status(object):
-  def __init__(self, status_byte):
-    self.oneWireBusy = (status_byte & 0x01) == 0x01
-    self.presencePulse = (status_byte & 0x02) == 0x02
-    self.shortDetected = (status_byte & 0x04) == 0x04
-    self.logicLevel = (status_byte & 0x08) == 0x08
-    self.deviceReset = (status_byte & 0x10) == 0x10
-    self.singleBitResult = (status_byte & 0x20) == 0x20
-    self.tripletSecondBit = (status_byte & 0x40) == 0x40
-    self.branchDirTaken = (status_byte & 0x80) == 0x80
-
 class DS2482(Thread):
   def __init__(self, address=0x18, bus=None):
     Thread.__init__(self)
@@ -56,7 +43,7 @@ class DS2482(Thread):
     self.queue = Queue.Queue()
     self.i2cbus = bus if bus is not None else smbus.SMBus(1)
     self.shutdown = False
-    # self.start()
+    self.start()
 
   def execute(self, event):
     self.queue.put(event)
