@@ -8,6 +8,7 @@ import sys
 import os
 import logging
 from com.puffinware.pistat.routes import setup_routes
+from com.puffinware.pistat.db import setup_db
 from logging.handlers import RotatingFileHandler
 from flask import Flask
 from argparse import ArgumentParser
@@ -52,13 +53,15 @@ def main(argv=None):
   logging.getLogger('requests.packages.urllib3').setLevel(logging.WARNING)
 
   setup_routes(webapp)
+  setup_db(webapp)
 
   log.info("Starting pistat on %s | config file: %s | debug: %s", options.port, options.config, options.debug)
   if options.debug:
-    webapp.run(host='0.0.0.0', port=options.port, debug=True)
-  else:
-    http_server = WSGIServer(('', options.port), webapp, log=None)
-    http_server.serve_forever()
+    webapp.debug = True
+  #   webapp.run(host='0.0.0.0', port=options.port)
+  # else:
+  http_server = WSGIServer(('', options.port), webapp, log=None)
+  http_server.serve_forever()
 
 if __name__ == "__main__":
   main()

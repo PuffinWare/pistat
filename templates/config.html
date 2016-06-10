@@ -1,12 +1,93 @@
 {% extends "base.html" %}
-
-{% block title %}Pi Stat - Config{% endblock %}
-
+{% block title %}Config{% endblock %}
 {% block content %}
-Configs go here
-{% endblock %}
 
+{% for category in categories %}
+    <div class="row bg-category">
+      <div class="col-sm-4"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> {{ category.name }}</div>
+      <div class="col-sm-4">Active</div>
+      <div class="col-sm-4">
+        <div class="dropdown">
+          <button type="button" id="dropCat_{{ category.id }}" class="btn btn-default dropdown-toggle" aria-label="Left Align" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropCat_{{ category.id }}">
+            <li><a href="/category/{{ category.id }}" data-entity="category" data-entity-id="{{ category.id }}">Edit</a></li>
+            <li><a href="/thermostat?category_id={{ category.id }}">Add Thermostat</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/category/{{ category.id }}/delete" data-entity="category" data-entity-id="{{ category.id }}">Delete</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  {% if category.thermostat_set|length == 0 %}
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="glyphicon glyphicon-" aria-hidden="true"></span>
+          <strong>Warning</strong> No Thermostats have been defined
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% for thermostat in category.thermostat_set %}
+    <div class="row bg-thermostat">
+      <div class="col-sm-4"><span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span> {{ thermostat.name }}</div>
+      <div class="col-sm-4">Active</div>
+      <div class="col-sm-4">
+        <button type="button" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Semsor
+        </button>
+      </div>
+    </div>
+    {% for sensor in thermostat.sensor_set %}
+    <div class="row bg-sensor">
+      <div class="col-sm-4"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> {{ sensor.name }}</div>
+      <div class="col-sm-4">Active</div>
+      <div class="col-sm-4">
+        <button type="button" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  {% endfor %}
+
+  {% endfor %}
+{% endfor %}
+
+    <div class="row bg-category">
+      <div class="col-sm-4">
+        <button id="btn_category_add" type="button" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Category
+        </button>
+      </div>
+    </div>
+
+{% endblock %}
 {% block scripts %}
   <script>
+    $("#btn_category_add").click(function() {
+      window.location.href = '/category';
+    });
+    console.log('find dels')
+
+    $("a[data-entity]").click(function() {
+      var entity = $(this).data("entity");
+      var id = $(this).data("entity-id");
+      console.log('e:'+entity+' | id:'+id)
+      $.ajax({
+        url: '/' + entity + '/' + id,
+        type: 'DELETE',
+        success: function(result) {
+          window.location.assign('/config')
+        }
+      });
+    });
   </script>
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Category{% endblock %}
+{% block content %}
+
+  <form action="/category" method="POST">
+  {% if category is defined %}
+    <input type="hidden" name="category_id" value="{{ category.id }}"/>
+  {% endif %}
+    <div class="row bg-category">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">Name</span>
+          <input name="category_name" type="text" class="form-control" {% if category is defined %} value="{{ category.name }}" {% endif %}/>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-category">
+      <div class="col-sm-4">
+        <button type="submit" class="btn btn-default">Save</button>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
+
