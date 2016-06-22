@@ -2,7 +2,7 @@
 {% block title %}Category{% endblock %}
 {% block content %}
 
-  <form action="/category" method="POST">
+  <form action="/config/category" method="POST">
   {% if category is defined %}
     <input type="hidden" name="category_id" value="{{ category.id }}"/>
   {% endif %}

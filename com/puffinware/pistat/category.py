@@ -6,8 +6,8 @@ log = getLogger(__name__)
 
 def setup_routes(app, **kwargs):
 
-  @app.route('/category', methods=['POST', 'GET'])
-  def category():
+  @app.route('/config/category', methods=['POST', 'GET'])
+  def category_get():
     if request.method == "GET": # Empty form
       return render_template('edit_category.html', nav=NavHelper(NavHelper.CONFIG))
 
@@ -23,12 +23,12 @@ def setup_routes(app, **kwargs):
     category.save()
     return redirect(url_for('config'))
 
-  @app.route('/category/<category_id>', methods=['GET'])
+  @app.route('/config/category/<category_id>', methods=['GET'])
   def category_modify(category_id):
     category = Category.get(Category.id == category_id)
     return render_template('edit_category.html', category=category, nav=NavHelper(NavHelper.CONFIG))
 
-  @app.route('/category/<category_id>/delete', methods=['GET'])
+  @app.route('/config/category/<category_id>/delete', methods=['GET'])
   def category_delete(category_id):
     log.debug('delete category: %s', category_id)
     category = Category.get(Category.id == category_id)

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Category{% endblock %}
+{% block content %}
+
+  <form action="/config/thermostat" method="POST">
+  {% if thermostat is defined %}
+    <input type="hidden" name="thermostat_id" value="{{ thermostat.id }}"/>
+  {% else %}
+    <input type="hidden" name="category_id" value="{{ category_id }}"/>
+  {% endif %}
+    <div class="row bg-thermostat">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">Name</span>
+          <input name="thermostat_name" type="text" class="form-control" {% if thermostat is defined %} value="{{ thermostat.name }}" {% endif %}/>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-thermostat">
+      <div class="col-sm-4">
+        <button type="submit" class="btn btn-default">Save</button>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
+

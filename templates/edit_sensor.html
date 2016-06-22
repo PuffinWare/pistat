@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Category{% endblock %}
+{% block content %}
+
+  <form action="/config/sensor" method="POST">
+  {% if sensor is defined %}
+    <input type="hidden" name="sensor_id" value="{{ sensor.id }}"/>
+  {% else %}
+    {% if category_id != '' %}
+    <input type="hidden" name="category_id" value="{{ category_id }}"/>
+    {% else %}
+    <input type="hidden" name="thermostat_id" value="{{ thermostat_id }}"/>
+    {% endif %}
+  {% endif %}
+    <div class="row bg-sensor">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon">Name</span>
+          <input name="sensor_name" type="text" class="form-control" {% if sensor is defined %} value="{{ sensor.name }}" {% endif %}/>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-sensor">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon">Sensor</span>
+          <select id="sen-type" class="combobox input-large form-control" name="sensor_type" required="required">
+            <option value="">Choose a sensor</option>
+            <option value="DS18B20"{{ sh.sensor_type('DS18B20') | safe  }}>Maxim DS18B20</option>
+            <option value="OTHER">Other Sensor</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-sensor">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon">I2C Address</span>
+          <select id="sen-address" class="combobox input-large form-control" name="sensor_address" required="required">
+            <option value="">Choose an address</option>
+            {% for addr in sh.addresses %}
+            <option value="{{ addr }}"{{ sh.address(addr) | safe }}>{{ addr }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-sensor">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon">Channel</span>
+          <select id="sen-channel" class="combobox input-large form-control" name="sensor_channel" required="required">
+            <option value="">Choose a channel</option>
+            {% for channel in sh.channels %}
+            <option value="{{ channel }}"{{ sh.channel(channel) | safe }}>{{ channel }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row bg-sensor">
+      <div class="col-sm-4">
+        <button type="submit" class="btn btn-default">Save</button>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
+{% block scripts %}
+  <script>
+    $(document).ready(function() {
+      $('.combobox').combobox();
+    });
+
+  </script>
+{% endblock %}
+
