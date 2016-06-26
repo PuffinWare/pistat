@@ -1,4 +1,5 @@
-from com.puffinware.pistat.models import Sensor,Alert,NavHelper,SensorHelper
+from com.puffinware.pistat.models import Sensor,Alert
+from com.puffinware.pistat.helpers import NavHelper,SensorHelper
 from flask import render_template, request, redirect, url_for
 from logging import getLogger
 import json

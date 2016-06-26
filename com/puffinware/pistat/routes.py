@@ -2,7 +2,9 @@
 Copyright 2016 Puffin Software. All rights reserved.
 """
 
-from com.puffinware.pistat.models import Category,Alert,NavHelper
+from com.puffinware.pistat.models import Category
+from com.puffinware.pistat.helpers import NavHelper
+from com.puffinware.pistat.dao.reading_dao import current_readings
 from flask import render_template, request
 from logging import getLogger
 import category, thermostat, sensor
@@ -15,7 +17,11 @@ def setup_routes(app, **kwargs):
   # The "entry" point
   @app.route('/')
   def index():
-    return render_template('index.html', nav=nav_helper(NavHelper.HOME))
+    categories = Category.select()
+    if len(categories) == 0:
+      return render_template('empty.html', nav=nav_helper(NavHelper.HOME))
+    readings = current_readings()
+    return render_template('index.html', categories=categories, readings=readings, nav=nav_helper(NavHelper.HOME))
 
   @app.route('/config')
   def config():

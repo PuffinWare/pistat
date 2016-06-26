@@ -1,4 +1,5 @@
-from com.puffinware.pistat.models import Category,Thermostat,Alert,NavHelper
+from com.puffinware.pistat.models import Category,Thermostat,Alert
+from com.puffinware.pistat.helpers import NavHelper
 from flask import render_template, request, redirect, url_for
 from logging import getLogger
 
