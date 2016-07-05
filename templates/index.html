@@ -1,11 +1,49 @@
 {% extends "base.html" %}
-
 {% block title %}PiStat{% endblock %}
-
 {% block content %}
-Readings go here
-{% endblock %}
 
+  {% for category in categories %}
+    <div class="row bg-category">
+      <div class="row">
+        <div class="col-xs-3"><div class="category-name">{{ category.name }}</div></div>
+        <div class="col-xs-8"></div>
+        <div class="col-xs-1"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></div>
+      </div>
+      <div class="row">
+    {% for sensor in category.sensor_set %}
+        <div class="col-xs-3">
+          <div class="sensor-main">
+            <div class="sensor-name">{{ sensor.name }}</div>
+            <div class="sensor-reading">{{ readings.get(sensor.id) }}</div>
+          </div>
+        </div>
+    {% endfor %}
+      </div>
+
+    {% for thermostat in category.thermostat_set %}
+      <div class="row">
+        <div class="col-xs-3"><div class="thermostat-name">{{ thermostat.name }}</div></div>
+        <div class="col-xs-8"></div>
+        <div class="col-xs-1"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></div>
+        <div class="col-xs-12">
+          <div class="row">
+      {% for sensor in thermostat.sensor_set %}
+            <div class="col-xs-3">
+              <div class="sensor-main">
+                <div class="sensor-name">{{ sensor.name }}</div>
+                <div class="sensor-reading">{{ readings.get(sensor.id) }}</div>
+              </div>
+            </div>
+      {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    </div>
+  {% endfor %}
+
+{% endblock %}
 {% block scripts %}
   <script>
   </script>

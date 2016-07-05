@@ -24,7 +24,7 @@ def main(argv=None):
   parser.add_argument("-c", "--config", dest="config", default=DEFAULT_CONFIG_FILE, action="store", help="App config file")
   parser.add_argument("-d", "--debug", dest="debug", default=False, action="store_true", help="Run app in debug mode")
   parser.add_argument("-s", "--console", dest="console", default=False, action="store_true", help="Log to console")
-  parser.add_argument("-p", "--port", dest="port", default=5555, type=int, action="store", help="Port number to run on")
+  parser.add_argument("-p", "--port", dest="port", default=5337, type=int, action="store", help="Port number to run on")
   options = parser.parse_args()
 
   if not os.path.exists(options.config):
@@ -58,10 +58,10 @@ def main(argv=None):
   log.info("Starting pistat on %s | config file: %s | debug: %s", options.port, options.config, options.debug)
   if options.debug:
     webapp.debug = True
-  #   webapp.run(host='0.0.0.0', port=options.port)
-  # else:
-  http_server = WSGIServer(('', options.port), webapp, log=None)
-  http_server.serve_forever()
+    webapp.run(host='0.0.0.0', port=options.port)
+  else:
+    http_server = WSGIServer(('', options.port), webapp, log=None)
+    http_server.serve_forever()
 
 if __name__ == "__main__":
   main()

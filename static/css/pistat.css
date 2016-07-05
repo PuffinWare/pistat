@@ -14,3 +14,27 @@ h1, h2, h3, h4, h5, h6, label, th {
   background-color: #a0a0a0;
 }
 
+.category-name {
+  width: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: medium;
+}
+
+.sensor-main {
+  min-width: 100px;
+  max-width: 150px;
+  min-height: 50px;
+  border:solid 1px black;
+  padding: 0 4px 0 4px;
+}
+.sensor-name {
+  width: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: small;
+}
+.sensor-reading {
+  width: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: xx-large;
+}
+

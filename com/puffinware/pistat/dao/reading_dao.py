@@ -20,10 +20,11 @@ def current_readings():
       reading = query.execute().next()
       readings[s.id] = reading.reading
     except StopIteration:
-      log.debug('No reading for sensor: %d|5s', s.id, s.name)
+      log.debug('No reading for sensor: %d|%s', s.id, s.name)
       pass
 
   log.debug('Readings %s', readings)
+  return readings
 
 def get_readings_for_sensor(self, sensor_id):
   pass

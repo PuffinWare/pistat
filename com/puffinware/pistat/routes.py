@@ -19,19 +19,16 @@ def setup_routes(app, **kwargs):
   def index():
     categories = Category.select()
     if len(categories) == 0:
-      return render_template('empty.html', nav=nav_helper(NavHelper.HOME))
+      return render_template('empty.html', nav=NavHelper(NavHelper.HOME))
     readings = current_readings()
-    return render_template('index.html', categories=categories, readings=readings, nav=nav_helper(NavHelper.HOME))
+    return render_template('index.html', categories=categories, readings=readings, nav=NavHelper(NavHelper.HOME))
 
   @app.route('/config')
   def config():
     categories = Category.select()
     # for c in categories:
     #   log.debug('%d stats in %s', len(c.thermostat_set), c.name)
-    return render_template('config.html', categories=categories, nav=nav_helper(NavHelper.CONFIG))
-
-  def nav_helper(loc):
-    return NavHelper(loc)
+    return render_template('config.html', categories=categories, nav=NavHelper(NavHelper.CONFIG))
 
   ## Setup all the module's routes
   category.setup_routes(app)
